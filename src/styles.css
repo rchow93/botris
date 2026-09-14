@@ -1,0 +1,293 @@
+/* Dark theme — matches the approved mockup. */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: #0f1117;
+  color: #e8eaf0;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  overflow: hidden;
+}
+
+.app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 20px;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.55em;
+  text-indent: 0.55em; /* balance the tracking so it sits centred */
+  color: #f2f4f8;
+}
+
+.layout {
+  display: flex;
+  gap: 22px;
+  align-items: flex-start;
+}
+
+/* ------------------------------------------------------------------ Board */
+
+.board-frame {
+  position: relative;
+  border: 2px solid #2a2f3a;
+  border-radius: 6px;
+  background: #10131a;
+  padding: 6px;
+}
+
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 28px);
+  grid-template-rows: repeat(20, 28px);
+  gap: 1px;
+  background: #1c202b; /* shows through the 1px gaps as grid lines */
+}
+
+.cell {
+  width: 28px;
+  height: 28px;
+  background: #151821;
+  border-radius: 2px;
+}
+
+.cell.filled {
+  border-radius: 3px;
+}
+
+/* Active piece — painted on its own layer so it can be offset by a
+   fractional number of rows (smooth, sub-row falling at every level).
+   Positioned to the grid's content origin: board-frame padding is 6px. */
+.piece-layer {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  pointer-events: none;
+}
+
+.piece-layer .cell {
+  position: absolute;
+}
+
+/* Overlays (pause / game over) */
+.overlay {
+  position: absolute;
+  inset: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(15, 17, 23, 0.85);
+  border-radius: 4px;
+}
+
+.overlay h2 {
+  font-size: 22px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.overlay p {
+  font-size: 13px;
+  color: #9aa3b2;
+}
+
+.overlay .final-stats {
+  font-size: 14px;
+  color: #c6cdd9;
+  font-variant-numeric: tabular-nums;
+}
+
+.overlay .rank {
+  color: #7ee787;
+  font-weight: 700;
+}
+
+.overlay input.initials {
+  width: 110px;
+  padding: 8px;
+  font: inherit;
+  font-size: 20px;
+  letter-spacing: 0.4em;
+  text-indent: 0.4em;
+  text-transform: uppercase;
+  color: #f2f4f8;
+  background: #1c202b;
+  border: 2px solid #2a2f3a;
+  border-radius: 4px;
+  outline: none;
+  text-align: center;
+  user-select: text;
+}
+
+/* Player name field (game-start gate): like the initials box but wider,
+   with normal spacing since names contain spaces. */
+.overlay input.name {
+  width: 200px;
+  padding: 8px;
+  font: inherit;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #f2f4f8;
+  background: #1c202b;
+  border: 2px solid #2a2f3a;
+  border-radius: 4px;
+  outline: none;
+  text-align: center;
+  user-select: text;
+}
+.overlay input.name::placeholder {
+  color: #4a5262;
+  letter-spacing: 0.2em;
+}
+
+/* ------------------------------------------------- Now playing picture */
+
+/* Sits in its own column between the board and the sidebar — it never
+   overlaps the play field, the controls, or the score panels. */
+.now-playing {
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.now-playing-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 4px;
+  animation: now-playing-fade 0.6s ease; /* replays on every song change */
+}
+
+@keyframes now-playing-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------- Sidebar */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 190px;
+}
+
+.panel {
+  border: 2px solid #2a2f3a;
+  border-radius: 6px;
+  background: #10131a;
+  padding: 12px;
+}
+
+.panel-label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: #9aa3b2;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.next-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 24px);
+  grid-template-rows: repeat(4, 24px);
+  gap: 1px;
+  background: #1c202b;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 1px;
+}
+
+.next-grid .cell {
+  width: 24px;
+  height: 24px;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid #1f2430;
+  padding: 8px 2px;
+}
+
+.stat-label {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: #9aa3b2;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f2f4f8;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Leaderboard */
+.lb-row {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #c6cdd9;
+}
+
+.lb-rank {
+  width: 14px;
+  text-align: right;
+  color: #7f8899;
+  font-variant-numeric: tabular-nums;
+}
+
+.lb-name {
+  flex: 1;
+  letter-spacing: 0.18em;
+}
+
+.lb-score {
+  font-variant-numeric: tabular-nums;
+}
+
+.lb-empty {
+  font-size: 12px;
+  color: #7f8899;
+  text-align: center;
+}
+
+.legend {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #7f8899;
+}
+
+.legend p {
+  white-space: nowrap;
+}

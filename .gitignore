@@ -1,0 +1,16 @@
+# Dependencies & build output
+node_modules/
+dist/
+out/
+release/
+coverage/
+.vite/
+
+# Logs, env, OS cruft
+*.log
+.env
+.env.*
+.DS_Store
+
+# Local Claude Code settings
+.claude/settings.local.json
